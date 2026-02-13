@@ -5,58 +5,38 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>San Valentín</title>
 
-<link href="https://i.pinimg.com/736x/df/d5/74/dfd57468d05d00b09d79aa8e0fb0e2af.jpg">
-
 <style>
 *{
   margin:0;
   padding:0;
   box-sizing:border-box;
-  font-family:'Cormorant Garamond', serif;
+  font-family: Arial, sans-serif;
 }
 
 body{
   height:100vh;
-  overflow:hidden;
-  background:url('https://images.unsplash.com/photo-1549887534-1541e9326642?auto=format&fit=crop&w=1500&q=80') no-repeat center/cover;
+  background:#0b1230;
   display:flex;
   justify-content:center;
   align-items:center;
   color:white;
 }
 
-.overlay{
-  position:absolute;
-  inset:0;
-  background:rgba(0,0,40,0.65);
-  backdrop-filter: blur(3px);
-}
-
 .container{
-  position:relative;
-  z-index:2;
   text-align:center;
-  padding:20px;
-  max-width:90%;
+  width:90%;
+  max-width:400px;
 }
 
-.hidden{display:none}
-
-/* TITULO */
-.title{
-  font-size:clamp(42px,6vw,60px);
-  font-family:'Great Vibes', cursive;
-  margin-bottom:25px;
+h1{
+  margin-bottom:20px;
 }
 
-/* TARJETA */
 .card{
-  background:rgba(10,20,60,0.85);
-  padding:25px;
-  border-radius:20px;
-  border:2px solid rgba(255,215,0,0.5);
-  box-shadow:0 0 20px rgba(255,215,0,0.4);
-  min-height:140px;
+  background:#11194a;
+  border-radius:15px;
+  padding:20px;
+  min-height:120px;
   display:flex;
   justify-content:center;
   align-items:center;
@@ -64,10 +44,9 @@ body{
 }
 
 .text{
-  font-size:clamp(18px,4vw,24px);
+  font-size:18px;
 }
 
-/* BOTONES */
 .buttons{
   margin-top:20px;
   display:flex;
@@ -76,156 +55,153 @@ body{
 }
 
 button{
-  padding:12px 30px;
-  border-radius:30px;
-  font-size:18px;
+  padding:10px 25px;
+  border-radius:25px;
+  border:none;
   cursor:pointer;
-  border:2px solid rgba(255,215,0,0.6);
-  background:rgba(10,20,60,0.85);
+  background:#11194a;
   color:white;
+  font-size:16px;
 }
 
-/* REGALOS */
-.gift-area{
-  margin-top:30px;
+.hidden{
+  display:none;
+}
+
+/* regalos */
+.gifts{
+  margin-top:25px;
   display:flex;
   justify-content:center;
-  gap:40px;
+  gap:30px;
 }
 
-.icon-box{
-  width:80px;
-  height:80px;
+.box{
+  width:70px;
+  height:70px;
   border:2px solid gold;
-  border-radius:20px;
+  border-radius:15px;
   display:flex;
   justify-content:center;
   align-items:center;
-  font-size:35px;
+  font-size:30px;
   cursor:pointer;
-  background:rgba(255,255,255,0.1);
 }
 
-/* MODAL */
+/* modal */
 .modal{
   position:fixed;
   inset:0;
-  background:rgba(0,0,30,0.95);
+  background:#0b1230;
   display:flex;
   flex-direction:column;
   justify-content:center;
   align-items:center;
-  z-index:9999;
 }
 
-.next-btn{
+.next{
   position:absolute;
-  bottom:30px;
-  right:30px;
+  bottom:20px;
+  right:20px;
 }
 </style>
 </head>
 
 <body>
-<div class="overlay"></div>
 
-<div class="container">
-  <div class="title">San Valentín</div>
+<div class="container" id="main">
+  <h1>San Valentín</h1>
 
   <div class="card">
-    <div id="text" class="text">Toca la pantalla para comenzar ✨</div>
+    <div id="text" class="text">
+      Toca la pantalla para comenzar
+    </div>
   </div>
 
-  <div id="buttons" class="hidden buttons">
+  <div class="buttons hidden" id="choice">
     <button id="yes">Sí</button>
     <button id="no">No</button>
   </div>
 
-  <div id="extras" class="hidden gift-area">
-    <div class="icon-box" onclick="openLetter()">✉️</div>
-    <div class="icon-box" onclick="openGift()">🎁</div>
+  <!-- REGALOS OCULTOS HASTA DECIR QUE SÍ -->
+  <div class="gifts hidden" id="gifts">
+    <div class="box" onclick="openLetter()">✉️</div>
+    <div class="box" onclick="openGift()">🎁</div>
   </div>
 </div>
 
 <script>
-const texts=[
-  "Hola, tengo algo por decirte…",
-  "Eres la persona más especial que he conocido",
-  "Eres lo primero que pienso al despertar",
-  "Y lo último antes de dormir",
-  "Estás en mi mente todo el día",
-  "Y eres a quien más quiero hacer feliz",
-  "Así que tengo una pregunta…",
-  "¿Quieres ser mi San Valentín, Melissa?"
+const messages=[
+  "Hola, tengo algo que decirte…",
+  "Llevaba tiempo pensando en esto",
+  "Porque eres alguien muy especial",
+  "Me haces sonreír sin darme cuenta",
+  "Y por eso quiero preguntarte algo",
+  "¿Quieres ser mi San Valentín?"
 ];
 
-let index=0;
+let i=0;
 let finished=false;
-const textEl=document.getElementById("text");
-const container=document.querySelector(".container");
-let opened=null;
+const text=document.getElementById("text");
 
 document.body.addEventListener("click",(e)=>{
   if(e.target.tagName==="BUTTON") return;
   if(finished) return;
 
-  textEl.innerText=texts[index];
-  index++;
+  text.innerText=messages[i];
+  i++;
 
-  if(index===texts.length){
+  if(i===messages.length){
     finished=true;
-    document.getElementById("buttons").classList.remove("hidden");
+    document.getElementById("choice").classList.remove("hidden");
   }
 });
 
-/* SI / NO */
+/* botones */
 document.getElementById("yes").onclick=()=>{
-  textEl.innerHTML="Gracias por decir que sí 💛<br>Te quiero muchísimo";
-  document.getElementById("buttons").classList.add("hidden");
-  document.getElementById("extras").classList.remove("hidden");
+  text.innerText="Sabía que dirías que sí 💛";
+  document.getElementById("choice").classList.add("hidden");
+  document.getElementById("gifts").classList.remove("hidden");
 };
 
 document.getElementById("no").onclick=()=>{
-  textEl.innerText="Sabía que ibas a decir que sí 😌";
+  text.innerText="No acepto esa respuesta 😌";
 };
 
-/* MODALES CON SIGUIENTE */
-function openLetter(){ openModal("letter"); }
-function openGift(){ openModal("gift"); }
+/* modales */
+function openLetter(){
+  openModal(`
+    <div class="card">
+      <div class="text">
+        Gracias por decir que sí.<br><br>
+        Prometo cuidarte y hacerte sonreír.
+      </div>
+    </div>
+  `);
+}
 
-function openModal(type){
-  opened=type;
-  container.classList.add("hidden");
+function openGift(){
+  openModal(`<div style="font-size:100px">🌻🌻🌻</div>`);
+}
+
+function openModal(content){
+  document.getElementById("main").classList.add("hidden");
 
   const modal=document.createElement("div");
   modal.className="modal";
-
   modal.innerHTML=`
-    ${type==="letter" ? `
-      <div class="card"><div class="text">
-        Melissa 💛<br><br>
-        Gracias por existir.<br>
-        Gracias por quedarte.<br><br>
-        Con amor.
-      </div></div>
-    ` : `
-      <div style="font-size:120px">🌻🌻🌻</div>
-    `}
-    <button class="next-btn">Siguiente →</button>
+    ${content}
+    <button class="next">Siguiente</button>
   `;
 
-  document.body.appendChild(modal);
-
-  modal.querySelector(".next-btn").onclick=()=>{
+  modal.querySelector(".next").onclick=()=>{
     modal.remove();
-    if(type==="letter") openGift();
-    else if(type==="gift" && opened==="gift"){
-      container.classList.remove("hidden");
-    }
+    document.getElementById("main").classList.remove("hidden");
   };
+
+  document.body.appendChild(modal);
 }
 </script>
 
 </body>
 </html>
-
