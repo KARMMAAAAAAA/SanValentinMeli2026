@@ -18,7 +18,7 @@
 body{
   height:100vh;
   overflow:hidden;
-  background:url('https://blog.vangoghgallery.com/wp-content/uploads/Starry-Night-Over-the-Rhone-Featured-1-800x533.jpg') no-repeat center/cover;
+  background:url('https://images.unsplash.com/photo-1549887534-1541e9326642?auto=format&fit=crop&w=1500&q=80') no-repeat center/cover;
   display:flex;
   justify-content:center;
   align-items:center;
@@ -38,15 +38,11 @@ body{
   text-align:center;
   padding:20px;
   max-width:90%;
-  transition:opacity 0.4s ease;
 }
 
-.hidden{
-  display:none !important;
-}
+.hidden{display:none}
 
 /* TITULO */
-
 .title{
   font-size:clamp(42px,6vw,60px);
   font-family:'Great Vibes', cursive;
@@ -54,7 +50,6 @@ body{
 }
 
 /* TARJETA */
-
 .card{
   background:rgba(10,20,60,0.85);
   padding:25px;
@@ -62,7 +57,6 @@ body{
   border:2px solid rgba(255,215,0,0.5);
   box-shadow:0 0 20px rgba(255,215,0,0.4);
   min-height:140px;
-
   display:flex;
   justify-content:center;
   align-items:center;
@@ -74,7 +68,6 @@ body{
 }
 
 /* BOTONES */
-
 .buttons{
   margin-top:20px;
   display:flex;
@@ -84,25 +77,15 @@ body{
 
 button{
   padding:12px 30px;
-  border:none;
   border-radius:30px;
   font-size:18px;
   cursor:pointer;
-}
-
-#yes{
-  background:gold;
-  color:black;
-}
-
-#no{
-  background:white;
-  color:black;
-  position:relative;
+  border:2px solid rgba(255,215,0,0.6);
+  background:rgba(10,20,60,0.85);
+  color:white;
 }
 
 /* REGALOS */
-
 .gift-area{
   margin-top:30px;
   display:flex;
@@ -121,63 +104,24 @@ button{
   font-size:35px;
   cursor:pointer;
   background:rgba(255,255,255,0.1);
-  transition:transform 0.3s ease;
-}
-
-.icon-box:hover{
-  transform:scale(1.1);
 }
 
 /* MODAL */
-
 .modal{
   position:fixed;
   inset:0;
   background:rgba(0,0,30,0.95);
   display:flex;
+  flex-direction:column;
   justify-content:center;
   align-items:center;
   z-index:9999;
-
-  animation:modalIn 0.4s ease forwards;
 }
 
-.modal.closing{
-  animation:modalOut 0.3s ease forwards;
-}
-
-@keyframes modalIn{
-  from{opacity:0; transform:scale(0.95);}
-  to{opacity:1; transform:scale(1);}
-}
-
-@keyframes modalOut{
-  from{opacity:1; transform:scale(1);}
-  to{opacity:0; transform:scale(0.95);}
-}
-
-/* FLORES */
-
-.sunflowers{
-  font-size:120px;
-}
-
-/* NOTAS */
-
-.note{
+.next-btn{
   position:absolute;
-  background:white;
-  color:black;
-  padding:10px 15px;
-  border-radius:10px;
-  font-size:14px;
-  animation: float 6s infinite ease-in-out;
-}
-
-@keyframes float{
-  0%{transform:translateY(0);}
-  50%{transform:translateY(-20px);}
-  100%{transform:translateY(0);}
+  bottom:30px;
+  right:30px;
 }
 </style>
 </head>
@@ -219,102 +163,69 @@ let index=0;
 let finished=false;
 const textEl=document.getElementById("text");
 const container=document.querySelector(".container");
+let opened=null;
 
 document.body.addEventListener("click",(e)=>{
   if(e.target.tagName==="BUTTON") return;
   if(finished) return;
 
-  if(index<texts.length){
-    textEl.innerText=texts[index];
-    index++;
+  textEl.innerText=texts[index];
+  index++;
 
-    if(index===texts.length){
-      finished=true;
-      document.getElementById("buttons").classList.remove("hidden");
-    }
+  if(index===texts.length){
+    finished=true;
+    document.getElementById("buttons").classList.remove("hidden");
   }
 });
 
-/* NO */
-
-const noBtn=document.getElementById("no");
-const noTexts=["¿Segura?","¿De verdad?","Piénsalo bien","Última oportunidad"];
-let noIndex=0;
-
-function moveNo(){
-  const x=Math.random()*120 - 60;
-  const y=Math.random()*60 - 30;
-  noBtn.style.transform=`translate(${x}px, ${y}px)`;
-  textEl.innerText=noTexts[noIndex];
-  noIndex=(noIndex+1)%noTexts.length;
-}
-
-noBtn.addEventListener("mouseover",moveNo);
-noBtn.addEventListener("click",moveNo);
-
-/* SI */
-
-document.getElementById("yes").addEventListener("click",()=>{
-  textEl.innerHTML="Gracias por decir que sí 💛<br>Eres lo más bonito que me ha pasado<br>Te quiero muchísimo";
+/* SI / NO */
+document.getElementById("yes").onclick=()=>{
+  textEl.innerHTML="Gracias por decir que sí 💛<br>Te quiero muchísimo";
   document.getElementById("buttons").classList.add("hidden");
   document.getElementById("extras").classList.remove("hidden");
-});
+};
 
-/* MODALES */
+document.getElementById("no").onclick=()=>{
+  textEl.innerText="Sabía que ibas a decir que sí 😌";
+};
 
-function openGift(){
-  openModal(`
-    <div class="sunflowers">🌻🌻🌻</div>
-  `,true);
-}
+/* MODALES CON SIGUIENTE */
+function openLetter(){ openModal("letter"); }
+function openGift(){ openModal("gift"); }
 
-function openLetter(){
-  openModal(`
-    <div class="card">
-      <div class="text">
-        Melissa 💛<br><br>
-        Gracias por llegar a mi vida y hacerla más bonita.<br>
-        Prometo cuidarte, apoyarte y hacerte sonreír siempre.<br><br>
-        Con todo mi corazón.
-      </div>
-    </div>
-  `);
-}
-
-function openModal(content,notes=false){
+function openModal(type){
+  opened=type;
   container.classList.add("hidden");
 
   const modal=document.createElement("div");
   modal.className="modal";
-  modal.innerHTML=content;
+
+  modal.innerHTML=`
+    ${type==="letter" ? `
+      <div class="card"><div class="text">
+        Melissa 💛<br><br>
+        Gracias por existir.<br>
+        Gracias por quedarte.<br><br>
+        Con amor.
+      </div></div>
+    ` : `
+      <div style="font-size:120px">🌻🌻🌻</div>
+    `}
+    <button class="next-btn">Siguiente →</button>
+  `;
+
   document.body.appendChild(modal);
 
-  if(notes){
-    [
-      "Tu sonrisa ilumina mi vida",
-      "Eres mi lugar seguro",
-      "Siempre tú",
-      "Mi persona favorita",
-      "Gracias por existir"
-    ].forEach(p=>{
-      const note=document.createElement("div");
-      note.className="note";
-      note.innerText=p;
-      note.style.top=Math.random()*80+"%";
-      note.style.left=Math.random()*80+"%";
-      modal.appendChild(note);
-    });
-  }
-
-  modal.addEventListener("click",()=>{
-    modal.classList.add("closing");
-    setTimeout(()=>{
-      modal.remove();
+  modal.querySelector(".next-btn").onclick=()=>{
+    modal.remove();
+    if(type==="letter") openGift();
+    else if(type==="gift" && opened==="gift"){
       container.classList.remove("hidden");
-    },300);
-  });
+    }
+  };
 }
 </script>
 
 </body>
 </html>
+
