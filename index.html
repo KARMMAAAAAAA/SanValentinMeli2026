@@ -5,38 +5,64 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>San Valentín</title>
 
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Great+Vibes&display=swap" rel="stylesheet">
+
 <style>
 *{
   margin:0;
   padding:0;
   box-sizing:border-box;
-  font-family: Arial, sans-serif;
+  font-family:'Cormorant Garamond', serif;
 }
 
 body{
   height:100vh;
-  background:#0b1230;
+  overflow:hidden;
+  background:url('https://images.unsplash.com/photo-1549887534-1541e9326642?auto=format&fit=crop&w=1500&q=80') no-repeat center/cover;
   display:flex;
   justify-content:center;
   align-items:center;
   color:white;
 }
 
-.container{
-  text-align:center;
-  width:90%;
-  max-width:400px;
+.overlay{
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,40,0.65);
+  backdrop-filter: blur(3px);
 }
 
-h1{
-  margin-bottom:20px;
+.container{
+  position:relative;
+  z-index:2;
+  text-align:center;
+  padding:20px;
+  max-width:90%;
+  transition:opacity 0.4s ease;
 }
+
+.hidden{
+  display:none !important;
+}
+
+/* TITULO */
+
+.title{
+  font-size:clamp(42px,6vw,60px);
+  font-family:'Great Vibes', cursive;
+  margin-bottom:25px;
+}
+
+/* TARJETA */
 
 .card{
-  background:#11194a;
-  border-radius:15px;
-  padding:20px;
-  min-height:120px;
+  background:rgba(10,20,60,0.85);
+  padding:25px;
+  border-radius:20px;
+  border:2px solid rgba(255,215,0,0.5);
+  box-shadow:0 0 20px rgba(255,215,0,0.4);
+  min-height:140px;
+
   display:flex;
   justify-content:center;
   align-items:center;
@@ -44,8 +70,10 @@ h1{
 }
 
 .text{
-  font-size:18px;
+  font-size:clamp(18px,4vw,24px);
 }
+
+/* BOTONES */
 
 .buttons{
   margin-top:20px;
@@ -55,153 +83,239 @@ h1{
 }
 
 button{
-  padding:10px 25px;
-  border-radius:25px;
+  padding:12px 30px;
   border:none;
+  border-radius:30px;
+  font-size:18px;
   cursor:pointer;
-  background:#11194a;
-  color:white;
-  font-size:16px;
 }
 
-.hidden{
-  display:none;
+#yes{
+  background:gold;
+  color:black;
 }
 
-/* regalos */
-.gifts{
-  margin-top:25px;
+#no{
+  background:white;
+  color:black;
+  position:relative;
+}
+
+/* REGALOS */
+
+.gift-area{
+  margin-top:30px;
   display:flex;
   justify-content:center;
-  gap:30px;
+  gap:40px;
 }
 
-.box{
-  width:70px;
-  height:70px;
+.icon-box{
+  width:80px;
+  height:80px;
   border:2px solid gold;
-  border-radius:15px;
+  border-radius:20px;
   display:flex;
   justify-content:center;
   align-items:center;
-  font-size:30px;
+  font-size:35px;
   cursor:pointer;
+  background:rgba(255,255,255,0.1);
+  transition:transform 0.3s ease;
 }
 
-/* modal */
+.icon-box:hover{
+  transform:scale(1.1);
+}
+
+/* MODAL */
+
 .modal{
   position:fixed;
   inset:0;
-  background:#0b1230;
+  background:rgba(0,0,30,0.95);
   display:flex;
-  flex-direction:column;
   justify-content:center;
   align-items:center;
+  z-index:9999;
+
+  animation:modalIn 0.4s ease forwards;
 }
 
-.next{
+.modal.closing{
+  animation:modalOut 0.3s ease forwards;
+}
+
+@keyframes modalIn{
+  from{opacity:0; transform:scale(0.95);}
+  to{opacity:1; transform:scale(1);}
+}
+
+@keyframes modalOut{
+  from{opacity:1; transform:scale(1);}
+  to{opacity:0; transform:scale(0.95);}
+}
+
+/* FLORES */
+
+.sunflowers{
+  font-size:120px;
+}
+
+/* NOTAS */
+
+.note{
   position:absolute;
-  bottom:20px;
-  right:20px;
+  background:white;
+  color:black;
+  padding:10px 15px;
+  border-radius:10px;
+  font-size:14px;
+  animation: float 6s infinite ease-in-out;
+}
+
+@keyframes float{
+  0%{transform:translateY(0);}
+  50%{transform:translateY(-20px);}
+  100%{transform:translateY(0);}
 }
 </style>
 </head>
 
 <body>
+<div class="overlay"></div>
 
-<div class="container" id="main">
-  <h1>San Valentín</h1>
+<div class="container">
+  <div class="title">San Valentín</div>
 
   <div class="card">
-    <div id="text" class="text">
-      Toca la pantalla para comenzar
-    </div>
+    <div id="text" class="text">Toca la pantalla para comenzar ✨</div>
   </div>
 
-  <div class="buttons hidden" id="choice">
+  <div id="buttons" class="hidden buttons">
     <button id="yes">Sí</button>
     <button id="no">No</button>
   </div>
 
-  <!-- REGALOS OCULTOS HASTA DECIR QUE SÍ -->
-  <div class="gifts hidden" id="gifts">
-    <div class="box" onclick="openLetter()">✉️</div>
-    <div class="box" onclick="openGift()">🎁</div>
+  <div id="extras" class="hidden gift-area">
+    <div class="icon-box" onclick="openLetter()">✉️</div>
+    <div class="icon-box" onclick="openGift()">🎁</div>
   </div>
 </div>
 
 <script>
-const messages=[
-  "Hola, tengo algo que decirte…",
-  "Llevaba tiempo pensando en esto",
-  "Porque eres alguien muy especial",
-  "Me haces sonreír sin darme cuenta",
-  "Y por eso quiero preguntarte algo",
-  "¿Quieres ser mi San Valentín?"
+const texts=[
+  "Hola, tengo algo por decirte…",
+  "Eres la persona más especial que he conocido",
+  "Eres lo primero que pienso al despertar",
+  "Y lo último antes de dormir",
+  "Estás en mi mente todo el día",
+  "Y eres a quien más quiero hacer feliz",
+  "Así que tengo una pregunta…",
+  "¿Quieres ser mi San Valentín, Melissa?"
 ];
 
-let i=0;
+let index=0;
 let finished=false;
-const text=document.getElementById("text");
+const textEl=document.getElementById("text");
+const container=document.querySelector(".container");
 
 document.body.addEventListener("click",(e)=>{
   if(e.target.tagName==="BUTTON") return;
   if(finished) return;
 
-  text.innerText=messages[i];
-  i++;
+  if(index<texts.length){
+    textEl.innerText=texts[index];
+    index++;
 
-  if(i===messages.length){
-    finished=true;
-    document.getElementById("choice").classList.remove("hidden");
+    if(index===texts.length){
+      finished=true;
+      document.getElementById("buttons").classList.remove("hidden");
+    }
   }
 });
 
-/* botones */
-document.getElementById("yes").onclick=()=>{
-  text.innerText="Sabía que dirías que sí 💛";
-  document.getElementById("choice").classList.add("hidden");
-  document.getElementById("gifts").classList.remove("hidden");
-};
+/* NO */
 
-document.getElementById("no").onclick=()=>{
-  text.innerText="No acepto esa respuesta 😌";
-};
+const noBtn=document.getElementById("no");
+const noTexts=["¿Segura?","¿De verdad?","Piénsalo bien","Última oportunidad"];
+let noIndex=0;
 
-/* modales */
+function moveNo(){
+  const x=Math.random()*120 - 60;
+  const y=Math.random()*60 - 30;
+  noBtn.style.transform=`translate(${x}px, ${y}px)`;
+  textEl.innerText=noTexts[noIndex];
+  noIndex=(noIndex+1)%noTexts.length;
+}
+
+noBtn.addEventListener("mouseover",moveNo);
+noBtn.addEventListener("click",moveNo);
+
+/* SI */
+
+document.getElementById("yes").addEventListener("click",()=>{
+  textEl.innerHTML="Gracias por decir que sí 💛<br>Eres lo más bonito que me ha pasado<br>Te quiero muchísimo";
+  document.getElementById("buttons").classList.add("hidden");
+  document.getElementById("extras").classList.remove("hidden");
+});
+
+/* MODALES */
+
+function openGift(){
+  openModal(`
+    <div class="sunflowers">🌻🌻🌻</div>
+  `,true);
+}
+
 function openLetter(){
   openModal(`
     <div class="card">
       <div class="text">
-        Gracias por decir que sí.<br><br>
-        Prometo cuidarte y hacerte sonreír.
+        Melissa 💛<br><br>
+        Gracias por llegar a mi vida y hacerla más bonita.<br>
+        Prometo cuidarte, apoyarte y hacerte sonreír siempre.<br><br>
+        Con todo mi corazón.
       </div>
     </div>
   `);
 }
 
-function openGift(){
-  openModal(`<div style="font-size:100px">🌻🌻🌻</div>`);
-}
-
-function openModal(content){
-  document.getElementById("main").classList.add("hidden");
+function openModal(content,notes=false){
+  container.classList.add("hidden");
 
   const modal=document.createElement("div");
   modal.className="modal";
-  modal.innerHTML=`
-    ${content}
-    <button class="next">Siguiente</button>
-  `;
-
-  modal.querySelector(".next").onclick=()=>{
-    modal.remove();
-    document.getElementById("main").classList.remove("hidden");
-  };
-
+  modal.innerHTML=content;
   document.body.appendChild(modal);
+
+  if(notes){
+    [
+      "Tu sonrisa ilumina mi vida",
+      "Eres mi lugar seguro",
+      "Siempre tú",
+      "Mi persona favorita",
+      "Gracias por existir"
+    ].forEach(p=>{
+      const note=document.createElement("div");
+      note.className="note";
+      note.innerText=p;
+      note.style.top=Math.random()*80+"%";
+      note.style.left=Math.random()*80+"%";
+      modal.appendChild(note);
+    });
+  }
+
+  modal.addEventListener("click",()=>{
+    modal.classList.add("closing");
+    setTimeout(()=>{
+      modal.remove();
+      container.classList.remove("hidden");
+    },300);
+  });
 }
 </script>
 
 </body>
 </html>
+
