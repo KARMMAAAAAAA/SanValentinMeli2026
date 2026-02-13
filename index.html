@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>San Valentín</title>
+<title>San Valentín 💛</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Great+Vibes&display=swap" rel="stylesheet">
 
@@ -18,7 +18,7 @@ font-family:'Cormorant Garamond', serif;
 body{
 height:100vh;
 overflow:hidden;
-background:url('https://images.unsplash.com/photo-1549887534-1541e9326642?auto=format&fit=crop&w=1500&q=80') no-repeat center center/cover;
+background:url('https://images.unsplash.com/photo-1549887534-1541e9326642?auto=format&fit=crop&w=1500&q=80') no-repeat center/cover;
 display:flex;
 justify-content:center;
 align-items:center;
@@ -27,8 +27,7 @@ color:white;
 
 .overlay{
 position:absolute;
-width:100%;
-height:100%;
+inset:0;
 background:rgba(0,0,40,0.65);
 backdrop-filter: blur(3px);
 }
@@ -42,29 +41,29 @@ max-width:90%;
 }
 
 .title{
-font-size:60px;
+font-size:clamp(42px,6vw,60px);
 font-family:'Great Vibes', cursive;
-margin-bottom:30px;
+margin-bottom:25px;
 animation: fadeIn 2s ease forwards;
 }
 
 .card{
 background:rgba(10,20,60,0.85);
-padding:30px;
+padding:25px;
 border-radius:20px;
 border:2px solid rgba(255,215,0,0.5);
 box-shadow:0 0 20px rgba(255,215,0,0.4);
 min-height:120px;
-transition:all 0.6s ease;
+transition:0.6s;
 }
 
 .text{
-font-size:24px;
+font-size:clamp(18px,4vw,24px);
 }
 
 button{
 margin:15px;
-padding:12px 25px;
+padding:12px 30px;
 border:none;
 border-radius:30px;
 font-size:18px;
@@ -83,9 +82,7 @@ color:black;
 position:absolute;
 }
 
-.hidden{
-display:none;
-}
+.hidden{display:none;}
 
 .fade{
 animation: fadeIn 0.8s ease;
@@ -96,7 +93,7 @@ from{opacity:0; transform:translateY(10px);}
 to{opacity:1; transform:translateY(0);}
 }
 
-/* Regalo */
+/* Extras */
 
 .gift-area{
 margin-top:30px;
@@ -119,28 +116,26 @@ transition:0.3s;
 background:rgba(255,255,255,0.1);
 }
 
-.icon-box:hover{
-transform:scale(1.1);
-}
+.icon-box:hover{transform:scale(1.1);}
 
-/* Modal regalo */
+/* Modal */
 
 .modal{
 position:absolute;
-width:100%;
-height:100%;
-top:0;
-left:0;
+inset:0;
 background:rgba(0,0,30,0.9);
 display:flex;
 justify-content:center;
 align-items:center;
 flex-direction:column;
+gap:20px;
+text-align:center;
+padding:20px;
 }
 
 .sunflowers{
 font-size:120px;
-animation: bloom 1.5s ease forwards;
+animation:bloom 1.5s ease forwards;
 }
 
 @keyframes bloom{
@@ -163,11 +158,10 @@ animation: float 6s infinite ease-in-out;
 50%{transform:translateY(-20px);}
 100%{transform:translateY(0);}
 }
-
 </style>
 </head>
-<body>
 
+<body>
 <div class="overlay"></div>
 
 <div class="container">
@@ -186,71 +180,69 @@ animation: float 6s infinite ease-in-out;
 <div class="icon-box" onclick="openLetter()">✉️</div>
 <div class="icon-box" onclick="openGift()">🎁</div>
 </div>
-
 </div>
 
 <script>
-
 let texts=[
-"Hola tengo algo por decirte",
+"Hola, tengo algo por decirte…",
 "Eres la persona más especial que he conocido",
-"Tú eres la primer persona que pienso al despertarme",
-"Y la última que pienso al dormirme",
-"Eres la persona que está en mi cabeza todo el día",
-"Y la persona que más quiero hacer feliz por el resto de mi vida",
-"Dicho todo esto te tengo una pregunta...",
-"¿Quieres ser mi San Valentín Melissa?"
+"Eres lo primero que pienso al despertar",
+"Y lo último antes de dormir",
+"Estás en mi mente todo el día",
+"Y eres a quien más quiero hacer feliz",
+"Así que tengo una pregunta…",
+"¿Quieres ser mi San Valentín, Melissa? 💛"
 ];
 
 let index=0;
+let finished=false;
+const textEl=document.getElementById("text");
 
-document.body.addEventListener("click",function(e){
+document.body.addEventListener("click",()=>{
+if(finished) return;
 if(index<texts.length){
-document.getElementById("text").innerText=texts[index];
-document.getElementById("text").classList.add("fade");
+textEl.classList.remove("fade");
+void textEl.offsetWidth;
+textEl.innerText=texts[index];
+textEl.classList.add("fade");
 index++;
 if(index===texts.length){
+finished=true;
 document.getElementById("buttons").classList.remove("hidden");
 }
 }
 });
 
-let noBtn=document.getElementById("no");
-let noTexts=["¿Segura?","¿En serio?!","Ya no me quieres?","Última oportunidad"];
+const noBtn=document.getElementById("no");
+const noTexts=["¿Segura?","¿De verdad?","Me romperías el corazón 💔","Última oportunidad 😭"];
 let noIndex=0;
+
+function moveNo(){
+const maxX=window.innerWidth-120;
+const maxY=window.innerHeight-120;
+noBtn.style.left=Math.random()*maxX+"px";
+noBtn.style.top=Math.random()*maxY+"px";
+textEl.innerText=noTexts[noIndex];
+noIndex=(noIndex+1)%noTexts.length;
+}
 
 noBtn.addEventListener("mouseover",moveNo);
 noBtn.addEventListener("click",moveNo);
 
-function moveNo(){
-noBtn.style.top=Math.random()*80+"%";
-noBtn.style.left=Math.random()*80+"%";
-document.getElementById("text").innerText=noTexts[noIndex];
-noIndex=(noIndex+1)%noTexts.length;
-}
-
-document.getElementById("yes").addEventListener("click",function(){
-document.getElementById("text").innerHTML="Gracias por aceptar<br>Eres la persona más hermosa de este mundo<br>Me haces muy feliz<br>Te quieroooo 🖤";
+document.getElementById("yes").addEventListener("click",()=>{
+textEl.innerHTML="Gracias por decir que sí 💛<br>Eres lo más bonito que me ha pasado<br>Te quiero muchísimo 🖤";
 document.getElementById("buttons").classList.add("hidden");
 document.getElementById("extras").classList.remove("hidden");
 });
 
 function openGift(){
-let modal=document.createElement("div");
+const modal=document.createElement("div");
 modal.className="modal";
 modal.innerHTML=`<div class="sunflowers">🌻🌻🌻</div>`;
 document.body.appendChild(modal);
 
-let phrases=[
-"Tu sonrisa ilumina mi vida",
-"Eres mi lugar seguro",
-"Contigo todo tiene sentido",
-"Mi persona favorita",
-"Siempre tú 🌙"
-];
-
-phrases.forEach(p=>{
-let note=document.createElement("div");
+["Tu sonrisa ilumina mi vida","Eres mi lugar seguro","Siempre tú 🌙","Mi persona favorita","Gracias por existir"].forEach(p=>{
+const note=document.createElement("div");
 note.className="note";
 note.innerText=p;
 note.style.top=Math.random()*80+"%";
@@ -262,10 +254,20 @@ modal.addEventListener("click",()=>modal.remove());
 }
 
 function openLetter(){
-alert("Aquí irá tu carta personalizada 💌");
+const modal=document.createElement("div");
+modal.className="modal";
+modal.innerHTML=`
+<div class="card">
+<div class="text">
+Melissa 💛<br><br>
+Gracias por llegar a mi vida y hacerla más bonita.<br>
+Prometo cuidarte, apoyarte y hacerte sonreír siempre.<br><br>
+Con todo mi corazón.
+</div>
+</div>`;
+document.body.appendChild(modal);
+modal.addEventListener("click",()=>modal.remove());
 }
-
 </script>
-
 </body>
 </html>
