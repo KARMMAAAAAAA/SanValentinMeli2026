@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>San Valentín 🌌</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Poppins:wght@300;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;500&display=swap" rel="stylesheet">
 
 <style>
 html,body{
@@ -13,69 +13,86 @@ margin:0;
 padding:0;
 height:100%;
 overflow:hidden;
-font-family:'Poppins',sans-serif;
+font-family:'Montserrat',sans-serif;
 color:white;
-text-align:center;
 }
 
 /* Fondo real */
 body{
-background:url("https://upload.wikimedia.org/wikipedia/commons/e/ea/The_Starry_Night.jpg") no-repeat center center/cover;
+background-color:#000814;
+background-image:url("https://upload.wikimedia.org/wikipedia/commons/e/ea/The_Starry_Night.jpg");
+background-size:cover;
+background-position:center;
+background-repeat:no-repeat;
 display:flex;
-flex-direction:column;
 justify-content:center;
 align-items:center;
+flex-direction:column;
 }
 
-/* Título 3D retro */
+/* Capa oscura elegante */
+.overlay{
+position:absolute;
+width:100%;
+height:100%;
+background:rgba(0,0,30,0.55);
+backdrop-filter:blur(2px);
+z-index:0;
+}
+
+/* Título */
 .titulo{
 position:absolute;
-top:15%;
-font-family:'Press Start 2P', cursive;
-font-size:2rem;
-color:rgba(255,255,255,0.75);
-text-shadow:
-2px 2px 0 #1b263b,
-4px 4px 0 #0d1b2a,
-6px 6px 15px rgba(0,0,0,0.8);
-animation:flotar 4s ease-in-out infinite;
+top:10%;
+font-family:'Great Vibes',cursive;
+font-size:3rem;
+color:rgba(255,255,255,0.85);
+letter-spacing:2px;
+animation:suave 6s ease-in-out infinite;
+z-index:1;
 }
 
-@keyframes flotar{
+@keyframes suave{
 0%,100%{transform:translateY(0);}
-50%{transform:translateY(-10px);}
+50%{transform:translateY(-8px);}
 }
 
-/* Caja textos */
+/* Texto */
 .texto{
-max-width:80%;
+position:relative;
+z-index:1;
+max-width:85%;
+padding:25px 30px;
 background:rgba(0,0,40,0.6);
-padding:25px;
 border-radius:20px;
+font-size:1.3rem;
+text-align:center;
 backdrop-filter:blur(6px);
-font-size:1.2rem;
 opacity:0;
-transition:opacity 0.6s ease;
+transform:translateY(20px);
+transition:opacity 0.8s ease, transform 0.8s ease;
 }
 
-.visible{
+.texto.visible{
 opacity:1;
+transform:translateY(0);
 }
 
 /* Botones */
 .botones{
-margin-top:20px;
+margin-top:25px;
 display:none;
 position:relative;
+z-index:2;
 }
 
 button{
-padding:12px 25px;
-margin:10px;
+padding:12px 28px;
 border:none;
-border-radius:25px;
+border-radius:30px;
 font-size:1rem;
 cursor:pointer;
+margin:10px;
 transition:0.3s;
 }
 
@@ -94,7 +111,8 @@ position:absolute;
 
 <body>
 
-<div class="titulo">San Valentin</div>
+<div class="overlay"></div>
+<div class="titulo">San Valentín</div>
 
 <div id="texto" class="texto"></div>
 
@@ -128,8 +146,10 @@ textoEl.classList.add("visible");
 
 if(i===textos.length-1){
 botones.style.display="block";
+moverNo();
 }
 }
+
 mostrar();
 
 document.body.addEventListener("click",()=>{
@@ -139,28 +159,30 @@ mostrar();
 }
 });
 
-/* Botón No que huye */
+/* Botón NO ultra escurridizo */
 const noBtn=document.getElementById("no");
 const frasesNo=["Segura","¿En serio?!","Ya no me quieres?","Última oportunidad"];
 let contador=0;
 
 function moverNo(){
-const x=Math.random()*(window.innerWidth-100);
-const y=Math.random()*(window.innerHeight-50);
+const maxX=window.innerWidth-100;
+const maxY=window.innerHeight-60;
+const x=Math.random()*maxX;
+const y=Math.random()*maxY;
 noBtn.style.left=x+"px";
 noBtn.style.top=y+"px";
 }
 
 noBtn.addEventListener("touchstart",e=>{
-e.stopPropagation();
-moverNo();
+e.preventDefault();
 textoEl.innerText=frasesNo[contador];
 contador=(contador+1)%frasesNo.length;
+moverNo();
 });
 
 noBtn.addEventListener("mouseover",moverNo);
 
-/* Botón Sí */
+/* Botón SI */
 document.getElementById("si").addEventListener("click",e=>{
 e.stopPropagation();
 botones.style.display="none";
