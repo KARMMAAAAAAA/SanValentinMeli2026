@@ -18,7 +18,8 @@
 body{
   height:100vh;
   overflow:hidden;
-  background:url('https://blog.vangoghgallery.com/wp-content/uploads/Starry-Night-Over-the-Rhone-Featured-1-800x533.jpg') no-repeat center/cover;
+  /* Mantenemos el fondo original */
+  background:url('https://images.unsplash.com/photo-1549887534-1541e9326642?auto=format&fit=crop&w=1500&q=80') no-repeat center/cover;
   display:flex;
   justify-content:center;
   align-items:center;
@@ -86,7 +87,6 @@ button{
   border-radius:30px;
   font-size:18px;
   cursor:pointer;
-  transition: transform 0.2s;
 }
 
 #yes{
@@ -126,11 +126,13 @@ button{
   transform:scale(1.1);
 }
 
-/* MODAL */
+/* MODAL CON MISMO FONDO */
 .modal{
   position:fixed;
   inset:0;
-  background:rgba(0,0,30,0.95);
+  /* Cambiado a transparente con desenfoque para que se vea el fondo original */
+  background:rgba(0,0,40,0.4); 
+  backdrop-filter: blur(8px);
   display:flex;
   justify-content:center;
   align-items:center;
@@ -147,17 +149,19 @@ button{
 .sunflowers{
   font-size:120px;
   z-index: 10;
+  filter: drop-shadow(0 0 10px rgba(255,215,0,0.5));
 }
 
-/* NOTAS POSICIÓN FIJA ALREDEDOR */
+/* NOTAS POSICIÓN FIJA */
 .note{
   position:absolute;
   background:white;
   color:black;
-  padding:8px 12px;
+  padding:8px 15px;
   border-radius:10px;
   font-size:14px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
   white-space: nowrap;
 }
 </style>
@@ -185,7 +189,6 @@ button{
 </div>
 
 <script>
-// TUS TEXTOS ORIGINALES
 const texts=[
   "Hola, tengo algo por decirte…",
   "Eres la persona más especial que he conocido",
@@ -203,7 +206,6 @@ const textEl=document.getElementById("text");
 const cardClick=document.getElementById("card-click");
 const mainContainer=document.getElementById("main-container");
 
-// Avanzar texto solo al tocar la tarjeta (para no interferir con botones)
 cardClick.addEventListener("click",()=>{
   if(finished) return;
 
@@ -218,13 +220,12 @@ cardClick.addEventListener("click",()=>{
   }
 });
 
-/* LÓGICA BOTÓN NO */
 const noBtn=document.getElementById("no");
 const noTexts=["¿Segura?","¿De verdad?","Piénsalo bien","Última oportunidad"];
 let noIndex=0;
 
 function moveNo(e){
-  e.stopPropagation(); // Evita que el click se propague al body
+  e.stopPropagation();
   const x = Math.random() * 150 - 75;
   const y = Math.random() * 100 - 50;
   noBtn.style.transform = `translate(${x}px, ${y}px)`;
@@ -235,7 +236,6 @@ function moveNo(e){
 noBtn.addEventListener("mouseover", moveNo);
 noBtn.addEventListener("click", moveNo);
 
-/* LÓGICA BOTÓN SI */
 document.getElementById("yes").addEventListener("click",(e)=>{
   e.stopPropagation();
   textEl.innerHTML="Gracias por decir que sí 💛<br>Eres lo más bonito que me ha pasado<br>Te quiero muchísimo";
@@ -243,7 +243,6 @@ document.getElementById("yes").addEventListener("click",(e)=>{
   document.getElementById("extras").classList.remove("hidden");
 });
 
-/* MODALES */
 function openGift(){
   const content = `<div class="sunflowers">🌻🌻🌻</div>`;
   openModal(content, true);
@@ -251,7 +250,7 @@ function openGift(){
 
 function openLetter(){
   const content = `
-    <div style="background:rgba(10,20,60,0.95); padding:30px; border-radius:20px; border:2px solid gold; max-width:80%;">
+    <div class="card-main" style="max-width:85%; cursor:default;">
       <div class="text">
         Melissa 💛<br><br>
         Gracias por llegar a mi vida y hacerla más bonita.<br>
@@ -264,7 +263,8 @@ function openLetter(){
 }
 
 function openModal(content, withNotes=false){
-  mainContainer.classList.add("hidden");
+  // Ocultamos el contenedor principal pero NO el fondo
+  mainContainer.style.opacity = "0";
 
   const modal=document.createElement("div");
   modal.className="modal";
@@ -272,14 +272,14 @@ function openModal(content, withNotes=false){
   document.body.appendChild(modal);
 
   if(withNotes){
-    // Posiciones fijas relativas al centro para que rodeen los girasoles
+    // Posiciones fijas para rodear los girasoles
     const positions = [
-      {top: '20%', left: '20%'},
-      {top: '20%', left: '70%'},
-      {top: '75%', left: '25%'},
-      {top: '75%', left: '75%'},
-      {top: '50%', left: '10%'},
-      {top: '50%', left: '80%'}
+      {top: '15%', left: '15%'},
+      {top: '15%', left: '65%'},
+      {top: '80%', left: '20%'},
+      {top: '80%', left: '70%'},
+      {top: '48%', left: '5%'},
+      {top: '48%', left: '75%'}
     ];
     
     const phrases = [
@@ -301,10 +301,9 @@ function openModal(content, withNotes=false){
     });
   }
 
-  // Cerrar al tocar el fondo
   modal.onclick = () => {
     modal.remove();
-    mainContainer.classList.remove("hidden");
+    mainContainer.style.opacity = "1";
   };
 }
 </script>
