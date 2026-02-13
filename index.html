@@ -18,7 +18,6 @@
 body{
   height:100vh;
   overflow:hidden;
-  /* Mantenemos el fondo original */
   background:url('https://blog.vangoghgallery.com/wp-content/uploads/Starry-Night-Over-the-Rhone-Featured-1-800x533.jpg') no-repeat center/cover;
   display:flex;
   justify-content:center;
@@ -40,6 +39,7 @@ body{
   text-align:center;
   padding:20px;
   max-width:90%;
+  transition: opacity 0.4s ease;
 }
 
 .hidden{
@@ -66,10 +66,13 @@ body{
   align-items:center;
   text-align:center;
   cursor: pointer;
+  max-width: 500px;
+  margin: 0 auto;
 }
 
 .text{
   font-size:clamp(18px,4vw,24px);
+  line-height: 1.4;
 }
 
 /* BOTONES */
@@ -87,6 +90,7 @@ button{
   border-radius:30px;
   font-size:18px;
   cursor:pointer;
+  transition: transform 0.2s;
 }
 
 #yes{
@@ -124,20 +128,21 @@ button{
 
 .icon-box:hover{
   transform:scale(1.1);
+  background:rgba(255,215,0,0.2);
 }
 
-/* MODAL CON MISMO FONDO */
+/* MODAL */
 .modal{
   position:fixed;
   inset:0;
-  /* Cambiado a transparente con desenfoque para que se vea el fondo original */
-  background:rgba(0,0,40,0.4); 
-  backdrop-filter: blur(8px);
+  background:rgba(0,0,30,0.3); 
+  backdrop-filter: blur(10px);
   display:flex;
   justify-content:center;
   align-items:center;
   z-index:9999;
   animation:modalIn 0.4s ease forwards;
+  cursor: pointer;
 }
 
 @keyframes modalIn{
@@ -145,11 +150,14 @@ button{
   to{opacity:1; transform:scale(1);}
 }
 
-/* FLORES */
-.sunflowers{
-  font-size:120px;
+/* CONTENEDOR DE LA IMAGEN (REEMPLAZO DE GIRASOLES) */
+.gift-img {
+  width: 280px; /* Ajusta el tamaño de tu foto aquí */
+  height: auto;
+  border-radius: 15px;
   z-index: 10;
-  filter: drop-shadow(0 0 10px rgba(255,215,0,0.5));
+  box-shadow: 0 0 25px rgba(255,215,0,0.4);
+  border: 2px solid gold;
 }
 
 /* NOTAS POSICIÓN FIJA */
@@ -236,15 +244,19 @@ function moveNo(e){
 noBtn.addEventListener("mouseover", moveNo);
 noBtn.addEventListener("click", moveNo);
 
+// CAMBIADO CORAZÓN AMARILLO POR NEGRO 🖤
 document.getElementById("yes").addEventListener("click",(e)=>{
   e.stopPropagation();
-  textEl.innerHTML="Gracias por decir que sí 💛<br>Eres lo más bonito que me ha pasado<br>Te quiero muchísimo";
+  textEl.innerHTML="Gracias por decir que sí 🖤<br>Eres lo más bonito que me ha pasado<br>Te quiero muchísimo";
   document.getElementById("buttons").classList.add("hidden");
   document.getElementById("extras").classList.remove("hidden");
 });
 
+// FUNCIÓN PARA EL REGALO CON TU IMAGEN
 function openGift(){
-  const content = `<div class="sunflowers">🌻🌻🌻</div>`;
+  // SUSTITUYE EL ENLACE AQUÍ ABAJO POR EL TUYO
+  const tuImagen = "https://files.fm/f/cgscqqmwgb"; 
+  const content = `<img src="${tuImagen}" class="gift-img">`;
   openModal(content, true);
 }
 
@@ -252,7 +264,7 @@ function openLetter(){
   const content = `
     <div class="card-main" style="max-width:85%; cursor:default;">
       <div class="text">
-        Melissa 💛<br><br>
+        Melissa 🖤<br><br>
         Gracias por llegar a mi vida y hacerla más bonita.<br>
         Prometo cuidarte, apoyarte y hacerte sonreír siempre.<br><br>
         Con todo mi corazón.
@@ -263,7 +275,6 @@ function openLetter(){
 }
 
 function openModal(content, withNotes=false){
-  // Ocultamos el contenedor principal pero NO el fondo
   mainContainer.style.opacity = "0";
 
   const modal=document.createElement("div");
@@ -272,7 +283,6 @@ function openModal(content, withNotes=false){
   document.body.appendChild(modal);
 
   if(withNotes){
-    // Posiciones fijas para rodear los girasoles
     const positions = [
       {top: '15%', left: '15%'},
       {top: '15%', left: '65%'},
