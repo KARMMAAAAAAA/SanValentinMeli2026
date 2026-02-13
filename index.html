@@ -3,167 +3,108 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Para Melissa 🌙</title>
+<title>San Valentín 🌌</title>
 
-<!-- Tipografía elegante -->
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&family=Dancing+Script:wght@600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Poppins:wght@300;500&display=swap" rel="stylesheet">
 
 <style>
-html, body {
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    height: 100%;
-    font-family: 'Playfair Display', serif;
+html,body{
+margin:0;
+padding:0;
+height:100%;
+overflow:hidden;
+font-family:'Poppins',sans-serif;
+color:white;
+text-align:center;
 }
 
-/* Fondo con zoom cinematográfico */
-body::before {
-    content: "";
-    position: fixed;
-    width: 110%;
-    height: 110%;
-    top: -5%;
-    left: -5%;
-    background: url("https://upload.wikimedia.org/wikipedia/commons/e/ea/The_Starry_Night.jpg") no-repeat center center/cover;
-    animation: zoom 40s infinite alternate ease-in-out;
-    z-index: -2;
+/* Fondo real */
+body{
+background:url("https://upload.wikimedia.org/wikipedia/commons/e/ea/The_Starry_Night.jpg") no-repeat center center/cover;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
 }
 
-@keyframes zoom {
-    from { transform: scale(1); }
-    to { transform: scale(1.1); }
+/* Título 3D retro */
+.titulo{
+position:absolute;
+top:15%;
+font-family:'Press Start 2P', cursive;
+font-size:2rem;
+color:rgba(255,255,255,0.75);
+text-shadow:
+2px 2px 0 #1b263b,
+4px 4px 0 #0d1b2a,
+6px 6px 15px rgba(0,0,0,0.8);
+animation:flotar 4s ease-in-out infinite;
 }
 
-/* Capa oscura elegante */
-.overlay {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,20,0.5);
-    z-index: -1;
+@keyframes flotar{
+0%,100%{transform:translateY(0);}
+50%{transform:translateY(-10px);}
 }
 
-/* Contenedor central */
-.container {
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
+/* Caja textos */
+.texto{
+max-width:80%;
+background:rgba(0,0,40,0.6);
+padding:25px;
+border-radius:20px;
+backdrop-filter:blur(6px);
+font-size:1.2rem;
+opacity:0;
+transition:opacity 0.6s ease;
 }
 
-/* Recuadro decorado */
-.card {
-    background: rgba(0,0,40,0.6);
-    border: 2px solid #ffd166;
-    border-radius: 20px;
-    padding: 40px;
-    max-width: 600px;
-    text-align: center;
-    color: #fff;
-    backdrop-filter: blur(8px);
-    box-shadow: 0 0 30px rgba(255,209,102,0.4);
-    animation: aparecer 1.5s ease;
+.visible{
+opacity:1;
 }
 
-@keyframes aparecer {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
+/* Botones */
+.botones{
+margin-top:20px;
+display:none;
+position:relative;
 }
 
-.texto {
-    font-size: 1.6rem;
-    min-height: 80px;
-    transition: opacity 0.8s ease;
+button{
+padding:12px 25px;
+margin:10px;
+border:none;
+border-radius:25px;
+font-size:1rem;
+cursor:pointer;
+transition:0.3s;
 }
 
-.botones {
-    margin-top: 30px;
-    display: none;
-    gap: 20px;
-    justify-content: center;
+#si{
+background:#ffd166;
+color:black;
 }
 
-button {
-    padding: 12px 28px;
-    font-size: 1.1rem;
-    border-radius: 30px;
-    border: none;
-    cursor: pointer;
-    font-family: 'Dancing Script', cursive;
-    transition: all 0.3s ease;
-}
-
-#si {
-    background: linear-gradient(45deg,#ffd166,#ffea00);
-    color: black;
-}
-
-#no {
-    background: #1b263b;
-    color: white;
-    position: relative;
-}
-
-/* Partículas doradas */
-canvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 0;
+#no{
+background:#1b263b;
+color:white;
+position:absolute;
 }
 </style>
 </head>
 
 <body>
 
-<div class="overlay"></div>
-<canvas id="particles"></canvas>
+<div class="titulo">San Valentin</div>
 
-<div class="container">
-    <div class="card">
-        <div id="texto" class="texto"></div>
-        <div class="botones" id="botones">
-            <button id="si">Sí 💛</button>
-            <button id="no">No 😅</button>
-        </div>
-    </div>
+<div id="texto" class="texto"></div>
+
+<div class="botones" id="botones">
+<button id="si">Sí 🖤</button>
+<button id="no">No 😅</button>
 </div>
 
 <script>
-// ✨ Partículas doradas
-const canvas = document.getElementById("particles");
-const ctx = canvas.getContext("2d");
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
-let particles = [];
-for(let i=0;i<80;i++){
-    particles.push({
-        x: Math.random()*canvas.width,
-        y: Math.random()*canvas.height,
-        r: Math.random()*2,
-        d: Math.random()*0.3
-    });
-}
-
-function draw(){
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    ctx.fillStyle = "rgba(255,209,102,0.8)";
-    particles.forEach(p=>{
-        ctx.beginPath();
-        ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-        ctx.fill();
-        p.y += p.d;
-        if(p.y>canvas.height) p.y=0;
-    });
-    requestAnimationFrame(draw);
-}
-draw();
-
-// 💬 Secuencia de textos
-const textos = [
+const textos=[
 "Hola tengo algo por decirte",
 "Eres la persona más especial que he conocido",
 "Tú eres la primer persona que pienso al despertarme",
@@ -179,44 +120,51 @@ const textoEl=document.getElementById("texto");
 const botones=document.getElementById("botones");
 
 function mostrar(){
-    textoEl.style.opacity=0;
-    setTimeout(()=>{
-        textoEl.innerText=textos[i];
-        textoEl.style.opacity=1;
-    },400);
-    if(i===textos.length-1){
-        botones.style.display="flex";
-    }
+textoEl.classList.remove("visible");
+setTimeout(()=>{
+textoEl.innerText=textos[i];
+textoEl.classList.add("visible");
+},300);
+
+if(i===textos.length-1){
+botones.style.display="block";
+}
 }
 mostrar();
 
 document.body.addEventListener("click",()=>{
-    if(i<textos.length-1){
-        i++;
-        mostrar();
-    }
+if(i<textos.length-1){
+i++;
+mostrar();
+}
 });
 
-// ❌ Botón No escurridizo
+/* Botón No que huye */
 const noBtn=document.getElementById("no");
-noBtn.addEventListener("mouseenter",()=>{
-    noBtn.style.transform=`translate(${Math.random()*150-75}px,${Math.random()*80-40}px)`;
-});
-noBtn.addEventListener("click",()=>{
-    botones.style.display="none";
+const frasesNo=["Segura","¿En serio?!","Ya no me quieres?","Última oportunidad"];
+let contador=0;
+
+function moverNo(){
+const x=Math.random()*(window.innerWidth-100);
+const y=Math.random()*(window.innerHeight-50);
+noBtn.style.left=x+"px";
+noBtn.style.top=y+"px";
+}
+
+noBtn.addEventListener("touchstart",e=>{
+e.stopPropagation();
+moverNo();
+textoEl.innerText=frasesNo[contador];
+contador=(contador+1)%frasesNo.length;
 });
 
-// ✅ Botón Sí magia
-document.getElementById("si").addEventListener("click",()=>{
-    textoEl.innerText="Sabía que dirías que sí 🌙✨";
-    for(let j=0;j<40;j++){
-        particles.push({
-            x: Math.random()*canvas.width,
-            y: Math.random()*canvas.height,
-            r: Math.random()*3,
-            d: Math.random()*1
-        });
-    }
+noBtn.addEventListener("mouseover",moverNo);
+
+/* Botón Sí */
+document.getElementById("si").addEventListener("click",e=>{
+e.stopPropagation();
+botones.style.display="none";
+textoEl.innerText="Gracias por aceptar, eres la persona más hermosa de este mundo, me haces muy feliz. Te quieroooo🖤";
 });
 </script>
 
