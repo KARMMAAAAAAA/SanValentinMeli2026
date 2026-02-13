@@ -5,85 +5,99 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Para Melissa 🌙</title>
 
+<!-- Tipografía elegante -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&family=Dancing+Script:wght@600&display=swap" rel="stylesheet">
+
 <style>
 html, body {
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background: radial-gradient(ellipse at bottom, #0d1b2a 0%, #000814 100%);
-    font-family: 'Segoe UI', sans-serif;
-    color: white;
     height: 100%;
+    font-family: 'Playfair Display', serif;
 }
 
-canvas {
+/* Fondo con zoom cinematográfico */
+body::before {
+    content: "";
     position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 0;
+    width: 110%;
+    height: 110%;
+    top: -5%;
+    left: -5%;
+    background: url("https://upload.wikimedia.org/wikipedia/commons/e/ea/The_Starry_Night.jpg") no-repeat center center/cover;
+    animation: zoom 40s infinite alternate ease-in-out;
+    z-index: -2;
 }
 
-.luna {
+@keyframes zoom {
+    from { transform: scale(1); }
+    to { transform: scale(1.1); }
+}
+
+/* Capa oscura elegante */
+.overlay {
     position: fixed;
-    top: 10%;
-    right: 10%;
-    width: 120px;
-    height: 120px;
-    background: radial-gradient(circle, #fff6c9 0%, #ffd166 40%, rgba(255,209,102,0.2) 70%);
-    border-radius: 50%;
-    box-shadow: 0 0 40px #ffd166;
-    z-index: 1;
-    animation: flotar 6s ease-in-out infinite;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,20,0.5);
+    z-index: -1;
 }
 
-@keyframes flotar {
-    0%,100% { transform: translateY(0px); }
-    50% { transform: translateY(-15px); }
-}
-
-.contenido {
-    position: relative;
-    z-index: 2;
+/* Contenedor central */
+.container {
     height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 20px;
+}
+
+/* Recuadro decorado */
+.card {
+    background: rgba(0,0,40,0.6);
+    border: 2px solid #ffd166;
+    border-radius: 20px;
+    padding: 40px;
+    max-width: 600px;
     text-align: center;
-    padding: 30px;
+    color: #fff;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 0 30px rgba(255,209,102,0.4);
+    animation: aparecer 1.5s ease;
+}
+
+@keyframes aparecer {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .texto {
     font-size: 1.6rem;
-    max-width: 600px;
-    opacity: 0;
-    transform: translateY(20px);
-    transition: all 1s ease;
-}
-
-.texto.visible {
-    opacity: 1;
-    transform: translateY(0);
+    min-height: 80px;
+    transition: opacity 0.8s ease;
 }
 
 .botones {
     margin-top: 30px;
     display: none;
-    flex-direction: column;
-    gap: 15px;
+    gap: 20px;
+    justify-content: center;
 }
 
 button {
-    padding: 12px 30px;
-    font-size: 1.2rem;
+    padding: 12px 28px;
+    font-size: 1.1rem;
     border-radius: 30px;
     border: none;
     cursor: pointer;
-    transition: 0.3s;
+    font-family: 'Dancing Script', cursive;
+    transition: all 0.3s ease;
 }
 
 #si {
-    background: linear-gradient(45deg, #ffd166, #ffea00);
-    color: #000;
+    background: linear-gradient(45deg,#ffd166,#ffea00);
+    color: black;
 }
 
 #no {
@@ -92,141 +106,118 @@ button {
     position: relative;
 }
 
-.miniTexto {
-    margin-top: 15px;
-    font-size: 1rem;
-    color: #ffd166;
-    min-height: 20px;
+/* Partículas doradas */
+canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 0;
 }
 </style>
 </head>
 
 <body>
 
-<canvas id="stars"></canvas>
-<div class="luna"></div>
+<div class="overlay"></div>
+<canvas id="particles"></canvas>
 
-<div class="contenido">
-    <div>
+<div class="container">
+    <div class="card">
         <div id="texto" class="texto"></div>
         <div class="botones" id="botones">
-            <button id="si">Sí </button>
-            <button id="no">No </button>
-            <div class="miniTexto" id="miniTexto"></div>
+            <button id="si">Sí 💛</button>
+            <button id="no">No 😅</button>
         </div>
     </div>
 </div>
 
 <script>
-// 🌌 Estrellas animadas
-const canvas = document.getElementById("stars");
+// ✨ Partículas doradas
+const canvas = document.getElementById("particles");
 const ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-let estrellas = [];
-
-for(let i = 0; i < 120; i++){
-    estrellas.push({
+let particles = [];
+for(let i=0;i<80;i++){
+    particles.push({
         x: Math.random()*canvas.width,
         y: Math.random()*canvas.height,
         r: Math.random()*2,
-        d: Math.random()*0.5
+        d: Math.random()*0.3
     });
 }
 
-function dibujar(){
+function draw(){
     ctx.clearRect(0,0,canvas.width,canvas.height);
-    ctx.fillStyle = "#ffd166";
-    estrellas.forEach(e=>{
+    ctx.fillStyle = "rgba(255,209,102,0.8)";
+    particles.forEach(p=>{
         ctx.beginPath();
-        ctx.arc(e.x,e.y,e.r,0,Math.PI*2);
+        ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
         ctx.fill();
-        e.y += e.d;
-        if(e.y > canvas.height) e.y = 0;
+        p.y += p.d;
+        if(p.y>canvas.height) p.y=0;
     });
-    requestAnimationFrame(dibujar);
+    requestAnimationFrame(draw);
 }
-dibujar();
+draw();
 
-// 💬 Textos
+// 💬 Secuencia de textos
 const textos = [
 "Hola tengo algo por decirte",
 "Eres la persona más especial que he conocido",
 "Tú eres la primer persona que pienso al despertarme",
-"Y la última que pienso al dormirme",
-"Eres la persona que está en mi cabeza todo el día",
-"Y la persona que más quiero hacer feliz por el resto de mi vida",
-"Dicho todo esto te tengo una pregunta",
+"y la última que pienso al dormirme",
+"eres la persona que está en mi cabeza todo el día",
+"y la persona que más quiero hacer feliz por el resto de mi vida",
+"dicho todo esto te tengo una pregunta",
 "¿Quieres ser mi San Valentín Melissa?"
 ];
 
-let indice = 0;
-const textoElemento = document.getElementById("texto");
-const botones = document.getElementById("botones");
+let i=0;
+const textoEl=document.getElementById("texto");
+const botones=document.getElementById("botones");
 
-function mostrarTexto(){
-    textoElemento.classList.remove("visible");
+function mostrar(){
+    textoEl.style.opacity=0;
     setTimeout(()=>{
-        textoElemento.innerText = textos[indice];
-        textoElemento.classList.add("visible");
-    },300);
-
-    if(indice === textos.length - 1){
-        botones.style.display = "flex";
+        textoEl.innerText=textos[i];
+        textoEl.style.opacity=1;
+    },400);
+    if(i===textos.length-1){
+        botones.style.display="flex";
     }
 }
+mostrar();
 
-document.body.addEventListener("click", ()=>{
-    if(indice < textos.length - 1){
-        indice++;
-        mostrarTexto();
+document.body.addEventListener("click",()=>{
+    if(i<textos.length-1){
+        i++;
+        mostrar();
     }
 });
 
-mostrarTexto();
-
-// ❌ Botón No
-const noBtn = document.getElementById("no");
-const miniTexto = document.getElementById("miniTexto");
-
-const frasesNo = [
-"Segura",
-"¿Enserio?!",
-"Ya no me quieres?",
-"Última oportunidad"
-];
-
-let contadorNo = 0;
-
-noBtn.addEventListener("click", (e)=>{
-    e.stopPropagation();
-    miniTexto.innerText = frasesNo[contadorNo];
-    contadorNo = (contadorNo + 1) % frasesNo.length;
-
-    noBtn.style.transform = `translate(${Math.random()*60-30}px, ${Math.random()*20-10}px)`;
+// ❌ Botón No escurridizo
+const noBtn=document.getElementById("no");
+noBtn.addEventListener("mouseenter",()=>{
+    noBtn.style.transform=`translate(${Math.random()*150-75}px,${Math.random()*80-40}px)`;
+});
+noBtn.addEventListener("click",()=>{
+    botones.style.display="none";
 });
 
-// ✅ Botón Sí
-const siBtn = document.getElementById("si");
-
-siBtn.addEventListener("click", (e)=>{
-    e.stopPropagation();
-    miniTexto.innerText = "";
-    lanzarMagia();
-});
-
-function lanzarMagia(){
-    for(let i=0;i<50;i++){
-        estrellas.push({
+// ✅ Botón Sí magia
+document.getElementById("si").addEventListener("click",()=>{
+    textoEl.innerText="Sabía que dirías que sí 🌙✨";
+    for(let j=0;j<40;j++){
+        particles.push({
             x: Math.random()*canvas.width,
             y: Math.random()*canvas.height,
             r: Math.random()*3,
             d: Math.random()*1
         });
     }
-    textoElemento.innerText = "Sabía que dirías que sí 🌙💛";
-}
+});
 </script>
 
 </body>
