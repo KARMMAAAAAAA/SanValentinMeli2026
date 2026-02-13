@@ -1,198 +1,83 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Para Melissa 💖</title>
-
-<style>
-body {
-    margin: 0;
-    background: #0a1230;
-    font-family: 'Courier New', monospace;
-    color: #fff;
-    overflow: hidden;
-    text-align: center;
-}
-
-/* Pantallas */
-.screen {
-    position: absolute;
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-}
-
-.hidden { display: none; }
-
-/* Títulos */
-.title {
-    font-size: 2.5rem;
-    color: #ff6ec7;
-    text-shadow: 0 0 10px #ff6ec7;
-}
-
-/* Botones */
-button {
-    padding: 15px 25px;
-    font-size: 1.2rem;
-    border: none;
-    border-radius: 10px;
-    margin: 10px;
-    cursor: pointer;
-}
-
-.start-btn { background: #ff6ec7; color: white; }
-.yes-btn { background: #ff4da6; color: white; }
-.no-btn {
-    background: white;
-    color: #ff4da6;
-    position: absolute;
-}
-
-/* Corazones */
-.heart {
-    position: absolute;
-    top: -10px;
-    font-size: 20px;
-    animation: fall linear infinite;
-}
-
-@keyframes fall {
-    to { transform: translateY(110vh); }
-}
-
-/* Caja de diálogo retro */
-.dialogue-box {
-    width: 90%;
-    max-width: 400px;
-    border: 3px solid #ff6ec7;
-    padding: 20px;
-    background: #111a44;
-    box-shadow: 0 0 20px #ff6ec7;
-    min-height: 120px;
-}
-</style>
-</head>
-
-<body>
-
-<!-- Pantalla Inicio -->
-<div id="startScreen" class="screen">
-    <h1 class="title">VALENTINE 💕</h1>
-    <p>Presiona para comenzar...</p>
-    <button class="start-btn" onclick="startCinematic()">Play</button>
-</div>
-
-<!-- Cinemática -->
-<div id="cinematicScreen" class="screen hidden">
-    <div class="dialogue-box">
-        <p id="cinematicText"></p>
-    </div>
-</div>
-
-<!-- Pregunta -->
-<div id="questionScreen" class="screen hidden">
-    <h1 class="title">Melissa...</h1>
-    <h2>¿Quieres ser mi San Valentín? 💖</h2>
-    <div>
-        <button class="yes-btn" onclick="yesAnswer()">Sí ❤️</button>
-        <button id="noBtn" class="no-btn">No 😅</button>
-    </div>
-</div>
-
-<!-- Final -->
-<div id="finalScreen" class="screen hidden">
-    <h1 class="title">Sabía que dirías que sí 😘</h1>
-    <p>Eres la mejor parte de mi vida 💕</p>
-</div>
-
 <script>
+document.addEventListener("DOMContentLoaded", function() {
 
-// 🎬 TEXTO CINEMÁTICO
-const cinematicLines = [
-    "Hace tiempo apareció alguien especial...",
-    "Su sonrisa cambió mis días...",
-    "Su nombre es Melissa...",
-    "Y desde entonces mi corazón tiene dueña...",
-];
+    const cinematicLines = [
+        "Hace tiempo apareció alguien especial...",
+        "Su sonrisa cambió mis días...",
+        "Su nombre es Melissa...",
+        "Y desde entonces mi corazón tiene dueña..."
+    ];
 
-let lineIndex = 0;
-let charIndex = 0;
-let currentLine = "";
-const textElement = document.getElementById("cinematicText");
+    let lineIndex = 0;
+    let charIndex = 0;
+    let currentLine = "";
+    const textElement = document.getElementById("cinematicText");
 
-function startCinematic() {
-    document.getElementById("startScreen").classList.add("hidden");
-    document.getElementById("cinematicScreen").classList.remove("hidden");
-    typeWriter();
-}
-
-// Efecto máquina de escribir
-function typeWriter() {
-    if (lineIndex < cinematicLines.length) {
-        currentLine = cinematicLines[lineIndex];
-        if (charIndex < currentLine.length) {
-            textElement.innerHTML += currentLine.charAt(charIndex);
-            charIndex++;
-            setTimeout(typeWriter, 40);
-        } else {
-            setTimeout(nextLine, 1200);
-        }
-    } else {
-        setTimeout(showQuestion, 1000);
+    function startCinematic() {
+        document.getElementById("startScreen").classList.add("hidden");
+        document.getElementById("cinematicScreen").classList.remove("hidden");
+        typeWriter();
     }
-}
 
-function nextLine() {
-    lineIndex++;
-    charIndex = 0;
-    textElement.innerHTML = "";
-    typeWriter();
-}
+    function typeWriter() {
+        if (lineIndex < cinematicLines.length) {
+            currentLine = cinematicLines[lineIndex];
+            if (charIndex < currentLine.length) {
+                textElement.innerHTML += currentLine.charAt(charIndex);
+                charIndex++;
+                setTimeout(typeWriter, 40);
+            } else {
+                setTimeout(nextLine, 1200);
+            }
+        } else {
+            setTimeout(showQuestion, 1000);
+        }
+    }
 
-function showQuestion() {
-    document.getElementById("cinematicScreen").classList.add("hidden");
-    document.getElementById("questionScreen").classList.remove("hidden");
-}
+    function nextLine() {
+        lineIndex++;
+        charIndex = 0;
+        textElement.innerHTML = "";
+        typeWriter();
+    }
 
-// Botón NO que huye
-const noBtn = document.getElementById("noBtn");
-noBtn.addEventListener("mouseover", moveButton);
-noBtn.addEventListener("click", moveButton);
+    function showQuestion() {
+        document.getElementById("cinematicScreen").classList.add("hidden");
+        document.getElementById("questionScreen").classList.remove("hidden");
+    }
 
-function moveButton() {
-    const x = Math.random() * (window.innerWidth - 100);
-    const y = Math.random() * (window.innerHeight - 50);
-    noBtn.style.left = x + "px";
-    noBtn.style.top = y + "px";
-}
+    function yesAnswer() {
+        document.getElementById("questionScreen").classList.add("hidden");
+        document.getElementById("finalScreen").classList.remove("hidden");
+    }
 
-// Final
-function yesAnswer() {
-    document.getElementById("questionScreen").classList.add("hidden");
-    document.getElementById("finalScreen").classList.remove("hidden");
-}
+    const noBtn = document.getElementById("noBtn");
 
-// Corazones cayendo
-function createHeart() {
-    const heart = document.createElement("div");
-    heart.classList.add("heart");
-    heart.innerHTML = "💖";
-    heart.style.left = Math.random() * 100 + "vw";
-    heart.style.animationDuration = (Math.random() * 3 + 2) + "s";
-    document.body.appendChild(heart);
+    function moveButton() {
+        const x = Math.random() * (window.innerWidth - 100);
+        const y = Math.random() * (window.innerHeight - 50);
+        noBtn.style.left = x + "px";
+        noBtn.style.top = y + "px";
+    }
 
-    setTimeout(() => heart.remove(), 5000);
-}
-setInterval(createHeart, 300);
+    noBtn.addEventListener("mouseover", moveButton);
+    noBtn.addEventListener("click", moveButton);
 
+    function createHeart() {
+        const heart = document.createElement("div");
+        heart.classList.add("heart");
+        heart.innerHTML = "💖";
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.animationDuration = (Math.random() * 3 + 2) + "s";
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 5000);
+    }
+
+    setInterval(createHeart, 300);
+
+    // Hacemos globales los botones
+    window.startCinematic = startCinematic;
+    window.yesAnswer = yesAnswer;
+
+});
 </script>
-
-
-</body>
-</html>
